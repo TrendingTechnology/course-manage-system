@@ -140,10 +140,10 @@ public class UserDao {
     public static void main(String[] args) {
         User user=new User();
         user.age="12";
-        user.stuId="1901420313";
-        user.name="gaowanlu";
+        user.stuId=AdminDao.admin;
+        user.name="admin";
         user.sex="man";
-        user.password="123456";
+        user.password=AdminDao.password;
         user.department="jisuanji";
         user.major="ruanjiangongcheng";
         if(addStudent(user)){
@@ -152,27 +152,27 @@ public class UserDao {
             System.out.println("insert failed");
         }
 
-        //update
-        user.department="123456";
-        update(user);
-
-        //delete
-        //delete(user);
-
-        //select
-        User user1=new User();
-        user.stuId="1901420313";
-        User user2=selectUserById(user);
-        System.out.println(user2);
-
-        //selectall
-        try{
-            List<User> users=userListFromResultList(HbaseUtil.scan(TABLENAME));
-            for(User user3:users){
-                System.out.println(user3);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+//        //update
+//        user.department="123456";
+//        update(user);
+//
+//        //delete
+//        //delete(user);
+//
+//        //select
+//        User user1=new User();
+//        user.stuId="1901420313";
+//        User user2=selectUserById(user);
+//        System.out.println(user2);
+//
+//        //selectall
+//        try{
+//            List<User> users=userListFromResultList(HbaseUtil.scan(TABLENAME));
+//            for(User user3:users){
+//                System.out.println(user3);
+//            }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
     }
 }
