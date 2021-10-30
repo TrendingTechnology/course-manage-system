@@ -2,8 +2,8 @@
 > Spring、SpringMVC + Hasdoop HBase Course Manage System  
 
 ## Quick Start
+#### 1
 ```shell
-1
 change your hBase service adress:site.linkway.core.dao.HbaseUtil  
 
     public static void initConnection () {
@@ -19,17 +19,16 @@ change your hBase service adress:site.linkway.core.dao.HbaseUtil
         }
     }
 
-
-2
+```
+#### 2
 Aut System Admin Change:
 change dao.AdminDao in and password   
-3
+#### 3
 execute dao.UserDao.main() for init Admin User in HBase Table
-4   
+#### 4  
 execute HbaseUtil.main() method to init HBase tables  
 using maven build this project  and run on tomcat server  
-
-5
+#### 5
 webUI install   
 you should install npm and nodejs  
 ```shell
@@ -39,9 +38,9 @@ you should install npm and nodejs
  cd ./build  
  sudo mv ./* ../../src/main/webapp/
 ``` 
-4 
+#### 6 
 build javaEE project and run on server,or using the Network Request API
-```
+
 ## Network Request API  
 
 ### User
