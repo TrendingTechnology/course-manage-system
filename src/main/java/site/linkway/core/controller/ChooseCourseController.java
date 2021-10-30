@@ -13,6 +13,7 @@ import site.linkway.core.dao.UserDao;
 import site.linkway.core.json.AllCourse;
 import site.linkway.core.json.Course;
 import site.linkway.core.json.StatusResult;
+import site.linkway.core.json.Student;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class ChooseCourseController {
         sc.studentId=(String)httpSession.getAttribute("id");
         sc.courseId=courseId;
         sc.score="0";
-        boolean result=SCDao.add(sc,"0");
+        boolean result=SCDao.add(sc,"0",true);
         statusResult.setStatus(200);
         statusResult.setResult(result);
         return mapper.writeValueAsString(statusResult);
@@ -75,12 +76,12 @@ public class ChooseCourseController {
     @RequestMapping(value = "/getMyCourse",produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getMyCourse(HttpSession httpSession)throws Exception{
-        HashMap<String,Boolean>map=new HashMap<>();
+        HashMap<String,String>map=new HashMap<>();
         List<SCDao.SC> scs=SCDao.scListFromResultList(HbaseUtil.scan("SC"));
         //create map
         for(SCDao.SC sc:scs){
             System.out.println(sc);
-            map.put(sc.courseId+"-"+sc.studentId,true);
+            map.put(sc.courseId+"-"+sc.studentId,sc.score);
         }
         List<CourseDao.Course> courseList=CourseDao.courseListFromResultList(HbaseUtil.scan("Course"));
         AllCourse allCourse=new AllCourse();
@@ -96,6 +97,7 @@ public class ChooseCourseController {
                 course1.teacher = course.teacher;
                 course1.time = course.time;
                 course1.title = course.title;
+                course1.score=map.get(course.courseId+"-"+userid);
                 allCourse.courses.add(course1);
             }
         }
@@ -115,6 +117,24 @@ public class ChooseCourseController {
         statusResult.setStatus(200);
         statusResult.setResult(result);
         return mapper.writeValueAsString(statusResult);
+    }
+
+    //get self data
+    @RequestMapping(value = "/getMyData",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getMyData(HttpSession httpSession) throws Exception{
+        UserDao.User user=new UserDao.User();
+        user.stuId=(String)httpSession.getAttribute("id");
+        user=UserDao.selectUserById(user);
+        Student student=new Student();
+        student.age=user.age;
+        student.stuId=user.stuId;
+        student.name=user.name;
+        student.password=user.password;
+        student.sex=user.sex;
+        student.department=user.department;
+        student.major=user.major;
+        return mapper.writeValueAsString(student);
     }
 
 }

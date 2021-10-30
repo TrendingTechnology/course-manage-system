@@ -14,4 +14,5 @@ public class Course {
     public String time;
     public String teacher;
     public String title;
+    public String score;
 }

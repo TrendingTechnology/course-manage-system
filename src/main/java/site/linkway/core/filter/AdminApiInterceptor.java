@@ -20,6 +20,7 @@ public class AdminApiInterceptor  implements HandlerInterceptor {
         String id=(String)httpSession.getAttribute("id");
         if(null==id||false==id.equals(AdminDao.admin)){
             httpServletResponse.sendRedirect("/loginPage");
+            return false;
         }
         return true;
     }

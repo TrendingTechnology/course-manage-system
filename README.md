@@ -28,24 +28,37 @@ execute dao.UserDao.main() for init Admin User in HBase Table
 4   
 execute HbaseUtil.main() method to init HBase tables  
 using maven build this project  and run on tomcat server  
+
 5
-using the Network Request API
+webUI install   
+you should install npm and nodejs  
+```shell
+ cd ./UIProject  
+ npm install  
+ npm run build 
+ cd ./build  
+ sudo mv ./* ../../src/main/webapp/
+``` 
+4 
+build javaEE project and run on server,or using the Network Request API
 ```
 ## Network Request API  
 
 ### User
 #### login
->/login?id={}&password={}
+>/login?id={}&password={}  
 #### change password
 >/logined/changePassword?newPassword={}
 #### view all courses
->/getCourseList  
+>/logined/getCourseList  
 #### stuent choose target course 
->/chooseCourse?courseId={} 
+>/logined/chooseCourse?courseId={} 
 #### student get choosed course
->/getMyCourse
+>/logined/getMyCourse
 #### student delete back course
->/deleteMyCourse?courseId={}  
+>/logined/deleteMyCourse?courseId={}  
+#### student get self data    
+>/logined/getMyData
 
 ### Admin
 > contain apis of User 

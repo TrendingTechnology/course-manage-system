@@ -22,11 +22,13 @@ public class SCDao {
     }
 
     public static final String TABLENAME=HbaseUtil.tableNames[2];
-    public static boolean add(SC sc,String score)  {
+    public static boolean add(SC sc,String score,boolean flag)  {//flag update:false  add:true
         boolean result=false;
         try{
-            if(null!=selectSCById(sc).courseId&&selectSCById(sc).score.equals(score)){//exist
-                System.out.println("exist");
+            if(null!=selectSCById(sc).courseId&&flag){//exist and it's add ,it's not update
+                return false;
+            }
+            if(flag==false&&null==selectSCById(sc).courseId){//it's update ,but it's not exist
                 return false;
             }
             System.out.println("execute insert");
@@ -123,7 +125,7 @@ public class SCDao {
         sc.studentId="cdcdf";
         sc.courseId="fvf";
         sc.score="43";
-        if(add(sc,"0")){
+        if(add(sc,"0",true)){
             System.out.println("insert sucuss");
         }else{
             System.out.println("insert failed");

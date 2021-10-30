@@ -5,10 +5,7 @@ import lombok.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import site.linkway.core.dao.CourseDao;
-import site.linkway.core.dao.HbaseUtil;
-import site.linkway.core.dao.SCDao;
-import site.linkway.core.dao.UserDao;
+import site.linkway.core.dao.*;
 import site.linkway.core.json.*;
 
 import javax.servlet.http.HttpSession;
@@ -74,10 +71,14 @@ public class AdminController {
     @RequestMapping(value = "/deleteStudent",produces = "application/json;charset=utf-8")
     @ResponseBody
     public String deleteStudent(@NonNull String id)throws Exception{
+        StatusResult statusResult=new StatusResult();
+        if(id.equals(AdminDao.admin)){//do not delete user if that user if admin
+            statusResult.setStatus(200);statusResult.setResult(false);
+            return mapper.writeValueAsString(statusResult);
+        }
         UserDao.User user=new UserDao.User();
         user.stuId=id;
         boolean result= UserDao.delete(user);
-        StatusResult statusResult=new StatusResult();
         statusResult.setStatus(200);statusResult.setResult(result);
         return mapper.writeValueAsString(statusResult);
     }
@@ -105,14 +106,20 @@ public class AdminController {
     @RequestMapping(value = "/updateSC",produces = "application/json;charset=utf-8")
     @ResponseBody
     public String updateSC(@NonNull String courseId,@NonNull String  userid,@NonNull int score)throws Exception{
+        StatusResult statusResult=new StatusResult();
+        statusResult.setStatus(200);
         //add
         SCDao.SC sc=new SCDao.SC();
         sc.studentId=userid;
+        //check exist student-course
         sc.courseId=courseId;
         sc.score=Integer.toString(score);
-        boolean result=SCDao.add(sc,Integer.toString(score));
-        StatusResult statusResult=new StatusResult();
-        statusResult.setStatus(200);
+        SCDao.SC sc1=SCDao.selectSCById(sc);
+        if(sc1.studentId==null){//no exist
+            statusResult.setResult(false);
+            return mapper.writeValueAsString(statusResult);
+        }
+        boolean result=SCDao.add(sc,Integer.toString(score),false);
         statusResult.setResult(result);
         return mapper.writeValueAsString(statusResult);
     }
